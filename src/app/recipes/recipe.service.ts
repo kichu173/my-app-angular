@@ -29,6 +29,10 @@ export class RecipeService  {
         return this.recipes.slice(); // returns the copy of the array rather than the original.
     }
 
+    getRecipe(index: number) {
+        return this.recipes[index];
+    }
+
     recipeSelected = new EventEmitter<Recipe>();
     
     addIngredientsToShoppingList(ingredients: Ingredient[]) {

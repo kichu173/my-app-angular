@@ -32,7 +32,7 @@ import {
           if (isAuth) {
             return true;
           }
-          return this.router.createUrlTree(['/auth']);// if it is false and you want tor redirect.
+          return this.router.createUrlTree(['/auth']);// if it is false and you want to redirect.
         })
         // tap(isAuth => {
         //   if (!isAuth) {

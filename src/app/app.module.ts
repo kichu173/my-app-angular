@@ -5,40 +5,19 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
-import { RecipesComponent } from './recipes/recipes.component';
-import { RecipeListComponent } from './recipes/recipe-list/recipe-list.component';
-import { RecipeDetailComponent } from './recipes/recipe-detail/recipe-detail.component';
-import { RecipeItemComponent } from './recipes/recipe-list/recipe-item/recipe-item.component';
-import { ShoppingListComponent } from './shopping-list/shopping-list.component';
-import { ShoppingEditComponent } from './shopping-list/shopping-edit/shopping-edit.component';
-import { DropdownDirective } from './shared/dropdown.directive';
 import { ShoppingListService } from './shopping-list/shopping-list.service';
 import { AppRoutingModule } from './app-routing.module';
-import { RecipeStartComponent } from './recipes/recipe-start/recipe-start.component';
-import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
 import { AuthComponent } from './auth/auth.component';
-import { LoadingSpinnerComponent } from './shared/loading-spinner.component';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
-import { AlertComponent } from './shared/alert/alert.component';
-import { PlaceholderDirective } from './shared/placholder/placeholder.directive';
+// import { RecipesModule } from './recipes/recipes.module';// comment/remove import too after doing lazy loading
+import { ShoppingModule } from './shopping-list/shopping.module';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
-  declarations: [
+  declarations: [// declaring same components in multiple modules is not allowed, where as rule is not same for imports and exports.
     AppComponent,
     HeaderComponent,
-    RecipesComponent,
-    RecipeListComponent,
-    RecipeDetailComponent,
-    RecipeItemComponent,
-    ShoppingListComponent,
-    ShoppingEditComponent,
-    DropdownDirective,
-    RecipeStartComponent,
-    RecipeEditComponent,
     AuthComponent,
-    LoadingSpinnerComponent,
-    AlertComponent,
-    PlaceholderDirective
   ],
   imports: [
     BrowserModule,
@@ -46,6 +25,9 @@ import { PlaceholderDirective } from './shared/placholder/placeholder.directive'
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
+    //RecipesModule,// Including feature modules which are separated module here in app.module.ts, after implementing lazy loading you can remove from here because you are not eagerly loading that
+    ShoppingModule,
+    SharedModule,
   ],
   providers: [
     ShoppingListService,
@@ -56,8 +38,18 @@ import { PlaceholderDirective } from './shared/placholder/placeholder.directive'
     },
   ],
   bootstrap: [AppComponent],
-  // entryComponents: [
+  // entryComponents: [ // you can remove here as it is also written in shared module and imported here.
   //   AlertComponent
   // ]
 })
 export class AppModule {}
+
+/* 
+Different types of module you can create:
+feature module(recipes,shopping.module.ts)
+
+shared module (common things to be shifted there and imported in created modules and app.module.ts)
+
+core module (for services to be have in separate file, in @NgModule we declare providers array and no exports needed for services since its for global access and import here in imports array(app.module.ts)) | most times we go for @Injectable({providedIn:'root'}) and ignore providers in app.module.ts and creating core module separately. video.10 in optimizing angular apps
+3.33 time
+*/

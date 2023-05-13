@@ -19,7 +19,7 @@ export interface AuthResponseData {
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   
-  user = new BehaviorSubject<User>(null);
+  user = new BehaviorSubject<User>(null);//* BehaviorSubject also gives subscribers immediate access to the previously emitted values even if they have'nt subscribed at the point of time that value was emitted.
   private tokenExpirationTimer: any;
 
   constructor(private http: HttpClient,private router: Router) {}
@@ -27,7 +27,7 @@ export class AuthService {
   //https://firebase.google.com/docs/reference/rest/auth#section-create-email-password
   // API_KEY - https://console.firebase.google.com/project/ng-angular-recipe-2022/settings/general | console - real time database
 
-  // TOKEN will expires in one hour.
+  //! TOKEN will expires in one hour(firebase token expiry).
 
   signup(email: string, password: string) {
     return this.http
@@ -40,7 +40,7 @@ export class AuthService {
         }
       )
       .pipe(
-        catchError(this.handleError),
+        catchError(this.handleError),// this will be executed only when any kind of error occurs from server, works well wtih throwError(returns Observable) and catchError(not returns observable).
         tap((resData) => {
           this.handleAuthentication(
             resData.email,
@@ -52,7 +52,7 @@ export class AuthService {
       );
   }
 
-  // test@test.com | test123
+  // test@test.com | test123 (https://firebase.google.com/docs/reference/rest/auth#section-sign-in-email-password)
   login(email: string, password: string) {
     return this.http
       .post<AuthResponseData>(
@@ -78,7 +78,8 @@ export class AuthService {
 
   private handleAuthentication(email: string, userId: string, token: string, expiresIn: number) {
     const expirationDate = new Date(
-      new Date().getTime() + expiresIn * 1000
+      new Date().getTime() + expiresIn * 1000// * timestamp(new Date().getTime()) in "ms" and expiresIn is in "seconds" which multiplies with 1000 to convert this to ms as well - which gives us expiration Date in milli seconds.
+      //* Again this is wrapped inside the new Date, this will convert it back to a data object which is concrete timestamp in a date obj form and not in ms anymore.
     );
     const user = new User(
       email,
@@ -88,13 +89,15 @@ export class AuthService {
     );
     localStorage.setItem('userData', JSON.stringify(user));
     this.user.next(user);
-    this.autoLogout(expiresIn * 1000); // gives in mille seconds (seconds * 1000)
+    this.autoLogout(expiresIn * 1000); // gives in milli seconds (seconds(3600 is 1 hr) * 1000 => 3600000 ms is 1 hour)
   }
 
   private handleError(errorRes: HttpErrorResponse) {
+    console.log(errorRes);
+    
     let errorMessage = 'An unknown error occurred!';
-    if (!errorRes.error || !errorRes.error.error) {
-      return throwError(errorMessage);
+    if (!errorRes.error || !errorRes.error.error) {//if the errorRes object does'nt contain the error key or error key on error key
+      return throwError(errorMessage);// this throwError will throw an observable so in component we can subscribe.
     }
     switch (errorRes.error.error.message) {
       case 'EMAIL_EXISTS':
@@ -122,15 +125,15 @@ export class AuthService {
   }
 
   autoLogout(expirationDuration: number) {
-    console.log(expirationDuration); // 3600000 ms is 1 hour
+    console.log("autoLogout() expirationDuration:: ",expirationDuration); // 3600000 ms is 1 hour
     this.tokenExpirationTimer = setTimeout(() => {
       this.logout();
     }, expirationDuration);
   }
 
 
-  autoLogin() {
-    const userData: {
+  autoLogin() {// This method is called in app.component.ts inside ngOnInit(), to restore the state of app when page is reloaded.
+    const userData: {// destructuring
       email: string,
       id: string,
       _token: string,
@@ -141,6 +144,7 @@ export class AuthService {
       return;
     }
 
+    // this loadedUser is for situation when page is reloaded and you want to retain the state.
     const loadedUser = new User(
       userData.email,
       userData.id,

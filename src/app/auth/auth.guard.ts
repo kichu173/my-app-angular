@@ -16,7 +16,7 @@ import {
 
     constructor(private authService: AuthService, private router: Router) {}
 
-    // route guard allows us to run logic right before a route is loaded and we can deny access if a certain condition is not met.
+    //* route guard allows us to run logic right before a route is loaded and we can deny access if a certain condition is not met.
     canActivate(
       route: ActivatedRouteSnapshot,
       router: RouterStateSnapshot

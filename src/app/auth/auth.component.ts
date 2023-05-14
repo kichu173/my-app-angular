@@ -48,6 +48,7 @@ export class AuthComponent {
         (errMessage) => {// throwError(errorMessage) will be gettin here.
           console.log(errMessage);
           this.error = errMessage;
+          // this.showAlert(errMessage); // this is for dynamic component loading using imperative(programmatic approach rather using declarative(*ngIf) easy approach).
           this.isLoading = false;
         }
       );
@@ -61,25 +62,27 @@ export class AuthComponent {
 
 //   private closeSub: Subscription;
 
-        // Creating a component programmatic (managing creation, showing component on demand and deletion)
+//* Creating a component programmatic (managing creation, showing component on demand and deletion). Goal is to dynamically create alert component using code.
 //   private showErrorAlert(message: string) {
-//     // const alertCmp = new AlertComponent();
-//     const alertCmpFactory = this.componentFactoryResolver.resolveComponentFactory(
+//      const alertCmp = new AlertComponent();//* valid typescript code but not valid angular code(so avoid it).
+//     const alertCmpFactory = this.componentFactoryResolver.resolveComponentFactory( //* best way to instanstiate component(componentFactoryResolver) in angular.
 //       AlertComponent
 //     );
-//     const hostViewContainerRef = this.alertHost.viewContainerRef;
-//     hostViewContainerRef.clear();
+//     const hostViewContainerRef = this.alertHost.viewContainerRef;//* ViewContainerRef managed by angular which give a pointer to place in DOM. Create a utility helper directive -> PlaceHolderDirective.
+//     hostViewContainerRef.clear();//* simply clears all angular components that have been rendered in that place before. Clear something if exsists to render something new.
 
-//     const componentRef = hostViewContainerRef.createComponent(alertCmpFactory);
+//     const componentRef = hostViewContainerRef.createComponent(alertCmpFactory);//* This line will create a new component in that place we pointed in DOM using viewContainerRef Object.
+//*     Angular 9 or Higher -> entryComponents works out of the box, but if you get error then declare in app.module.ts @NgModule({entryComponents:[AlertComponent]})
 
+//*     How can we now pass data into that component or listen to an event or remove that? Below code is to interact with the component(AlertComponent) properties.
 //     componentRef.instance.message = message;
 //     this.closeSub = componentRef.instance.close.subscribe(() => {
-//       this.closeSub.unsubscribe();
+//       this.closeSub.unsubscribe();//* to clear the subscription as we know this component will be removed.
 //       hostViewContainerRef.clear();
 //     });
 //   }
 
-//   ngOnDestroy() {
+//   ngOnDestroy() {//* to clear above closeSubscription even if authComponent is destroyed.
 //     if (this.closeSub) {
 //       this.closeSub.unsubscribe();
 //     }

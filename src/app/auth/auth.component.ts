@@ -48,7 +48,7 @@ export class AuthComponent {
         (errMessage) => {// throwError(errorMessage) will be gettin here.
           console.log(errMessage);
           this.error = errMessage;
-          // this.showAlert(errMessage); // this is for dynamic component loading using imperative(programmatic approach rather using declarative(*ngIf) easy approach).
+          // this.showErrorAlert(errMessage); //* this is for dynamic component loading using imperative(programmatic approach rather using declarative(*ngIf) easy approach).
           this.isLoading = false;
         }
       );
@@ -64,7 +64,7 @@ export class AuthComponent {
 
 //* Creating a component programmatic (managing creation, showing component on demand and deletion). Goal is to dynamically create alert component using code.
 //   private showErrorAlert(message: string) {
-//      const alertCmp = new AlertComponent();//* valid typescript code but not valid angular code(so avoid it).
+//      const alertCmp = new AlertComponent();//* valid typescript code but not valid angular code(so avoid it - better way is below code to create).
 //     const alertCmpFactory = this.componentFactoryResolver.resolveComponentFactory( //* best way to instanstiate component(componentFactoryResolver) in angular.
 //       AlertComponent
 //     );

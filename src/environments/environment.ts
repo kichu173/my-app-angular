@@ -3,7 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  //*EXample: API_KEY: value(auth.service.ts) - this env file works in development server and during production, enviroment.prod.ts added [key value] pair will be used. You can 'import {environment} from '..path'' in auth.service.ts and use it like - environment.API_KEY.
 };
 
 /*

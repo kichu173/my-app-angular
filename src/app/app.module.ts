@@ -14,7 +14,7 @@ import { ShoppingModule } from './shopping-list/shopping.module';
 import { SharedModule } from './shared/shared.module';
 
 @NgModule({
-  declarations: [// declaring same components in multiple modules is not allowed, where as rule is not same for imports and exports.
+  declarations: [// declaring same components in multiple modules is not allowed, where as rule is not same for imports and exports. Modules cannot communicate with other modules, Everything in a module works standalone.
     AppComponent,
     HeaderComponent,
     AuthComponent,
@@ -48,8 +48,10 @@ export class AppModule {}
 Different types of module you can create:
 feature module(recipes,shopping.module.ts)
 
-shared module (common things to be shifted there and imported in created modules and app.module.ts)
+shared module (common things to be shifted there and imported in created feature modules and app.module.ts of imports:[])
 
-core module (for services to be have in separate file, in @NgModule we declare providers array and no exports needed for services since its for global access and import here in imports array(app.module.ts)) | most times we go for @Injectable({providedIn:'root'}) and ignore providers in app.module.ts and creating core module separately. video.10 in optimizing angular apps
+core module (for services to be have in separate file, in @NgModule we declare providers array 
+and no exports needed for services since its for global access and import here in imports array(app.module.ts)) | most times we go for @Injectable({providedIn:'root'}) 
+and ignore providers in app.module.ts and creating core module separately. video.10 in optimizing angular apps.
 3.33 time
 */

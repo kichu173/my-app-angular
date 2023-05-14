@@ -14,7 +14,7 @@ import { ShoppingListComponent } from "./shopping-list.component";
         component: ShoppingListComponent,
       },
     ]),
-    //CommonModule,// commenting commonmodule as it is exported with shared module and used as imports here.
+    //CommonModule,// commenting commonmodule(unlocks ngFor and ngIf) as it is exported with shared module and used as imports here.
     SharedModule,
     FormsModule,
   ],
